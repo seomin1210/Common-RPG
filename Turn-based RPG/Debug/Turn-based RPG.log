@@ -1,4 +1,12 @@
-﻿  main.cpp
+﻿  Creature.cpp
+  Game.cpp
+C:\Users\USER\Documents\Common-RPG\Turn-based RPG\Game.cpp(56,13): warning C4244: '초기화 중': 'int'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+C:\Users\USER\Documents\Common-RPG\Turn-based RPG\Game.cpp(132,13): warning C4244: '초기화 중': 'int'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+C:\Users\USER\Documents\Common-RPG\Turn-based RPG\Game.cpp(164,13): warning C4244: '초기화 중': 'int'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+  main.cpp
   map.cpp
+  Monster.cpp
+  Player.cpp
+C:\Users\USER\Documents\Common-RPG\Turn-based RPG\Player.cpp(7,18): warning C4244: '*=': 'float'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
   코드를 생성하고 있습니다...
-  Turn-based RPG.vcxproj -> C:\Users\USER\source\repos\Turn-based RPG\Debug\Turn-based RPG.exe
+  Turn-based RPG.vcxproj -> C:\Users\USER\Documents\Common-RPG\Turn-based RPG\Debug\Turn-based RPG.exe

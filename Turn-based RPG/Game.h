@@ -7,6 +7,8 @@ class Game
 public:
 	Player* m_player;
 	Field* m_field;
+	int turn = 0;
+	int skillTurn = 0;
 	Game();
 	~Game();
 	void Init();
@@ -18,5 +20,6 @@ public:
 	void MonsterAction();
 	void MonsterAttack();
 	void MonsterMagic();
+	void EndTurn();
 };
 

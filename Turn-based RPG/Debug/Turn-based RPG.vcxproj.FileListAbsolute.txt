@@ -1,1 +1,2 @@
 C:\Users\USER\source\repos\Turn-based RPG\Debug\Turn-based RPG.exe
+C:\Users\USER\Documents\Common-RPG\Turn-based RPG\Debug\Turn-based RPG.exe

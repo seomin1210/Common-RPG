@@ -55,8 +55,10 @@ void Game::Attack()
 {
 	float miss = rand() % 20;
 	if (miss <= 1) {
+		setcolor(13, 0);
 		gotoxy(33, 41);
 		cout << "빗나감!";
+		setcolor(14, 0);
 		MonsterAction();
 		return;
 	}
@@ -68,15 +70,19 @@ void Game::Attack()
 	int damage = damageArr[idx] - m_field->m_monster->m_defence;
 	gotoxy(33, 41);
 	if (damage <= 0) {
+		setcolor(7, 0);
 		cout << "공격을 방어!";
 		Sleep(500);
+		setcolor(14, 0);
 		MonsterAction();
 		return;
 	}
 	int critical = rand() % 10;
 	if (critical < 1) {
+		setcolor(4, 0);
 		cout << "크리티컬!!  ";
 		damage *= 2;
+		setcolor(14, 0);
 	}
 	m_field->m_monster->m_hp -= damage;
 	cout << m_field->m_monster->m_name << "에게 " << damage << "데미지!";
@@ -87,16 +93,59 @@ void Game::Attack()
 void Game::Magic()
 {
 	gotoxy(33, 41);
-	cout << "구현중입니다...";
-	return;
+	if (m_player->m_mana < m_player->m_skillMana) {
+		cout << "마나가 부족합니다!";
+		return;
+	}
+	float miss = rand() % 20;
+	if (miss <= 1) {
+		setcolor(13, 0);
+		gotoxy(33, 41);
+		cout << "빗나감!";
+		setcolor(14, 0);
+		MonsterAction();
+		return;
+	}
+	int damageArr[11];
+	for (int i = 0; i <= 10; i++) {
+		damageArr[i] = m_player->m_attack - 5 + i;
+	}
+	int idx = rand() % 11;
+	int damage = damageArr[idx] - m_field->m_monster->m_defence + m_player->m_magic;
+	m_player->m_mana -= m_player->m_skillMana;
+	gotoxy(33, 42);
+	if (damage <= 0) {
+		setcolor(7, 0);
+		cout << "공격을 방어!";
+		Sleep(500);
+		setcolor(14, 0);
+		MonsterAction();
+		return;
+	}
+	int critical = rand() % 10;
+	if (critical < 1) {
+		setcolor(4, 0);
+		cout << "크리티컬!!  ";
+		damage *= 2;
+		setcolor(14, 0);
+	}
+	switch (m_player->m_creaturetype)
+	{
+	default:
+		break;
+	}
+	m_field->m_monster->m_hp -= damage;
+	cout << "스킬! " << m_field->m_monster->m_skillName << "! " << m_field->m_monster->m_name << "에게 " << damage << "데미지!";
 }
 
 void Game::Shield()
 {
+	setcolor(8, 0);
 	gotoxy(33, 41);
 	cout << "방어력이 상승합니다!";
 	int deffence = m_player->m_defence / 4;
 	m_player->m_defence += deffence; // 25%상승
+	setcolor(14, 0);
 	MonsterAction();
 	m_player->m_defence -= deffence;
 }
@@ -110,22 +159,23 @@ void Game::Item()
 
 void Game::MonsterAction()
 {
-	MonsterAttack();
-	/*int action = rand() % 10;
+	int action = rand() % 10;
 	if (action <= 7) {
 		MonsterAttack();
 	}
 	else {
 		MonsterMagic();
-	}*/
+	}
 }
 
 void Game::MonsterAttack()
 {
 	float miss = rand() % 20;
 	if (miss <= 1) {
+		setcolor(13, 0);
 		gotoxy(33, 42);
 		cout << "몬스터의 공격이 빗나감!";
+		EndTurn();
 		return;
 	}
 	int damageArr[11];
@@ -136,14 +186,98 @@ void Game::MonsterAttack()
 	int damage = damageArr[idx] - m_player->m_defence;
 	gotoxy(33, 42);
 	if (damage <= 0) {
+		setcolor(7, 0);
 		cout << "공격을 방어!";
+		EndTurn();
 		return;
 	}
 	m_player->m_hp -= damage;
 	cout << "플레이어에게 " << damage << "데미지!";
+	EndTurn();
 }
 
 void Game::MonsterMagic()
 {
+	if (m_field->m_monster->m_mana < m_field->m_monster->m_skillMana) {
+		MonsterAttack();
+		return;
+	}
+	if (m_field->m_monster->isBleeding == true && m_field->m_monster->m_creaturetype == MT_WOLF) {
+		MonsterAttack();
+		return;
+	}
+	float miss = rand() % 20;
+	if (miss <= 1) {
+		setcolor(13, 0);
+		gotoxy(33, 42);
+		cout << "몬스터의 공격이 빗나감!";
+		EndTurn();
+		return;
+	}
+	int damageArr[11];
+	for (int i = 0; i <= 10; i++) {
+		damageArr[i] = m_field->m_monster->m_attack - 5 + i;
+	}
+	int idx = rand() % 11;
+	int damage = damageArr[idx] - m_player->m_defence + m_field->m_monster->m_magic;
+	m_field->m_monster->m_mana -= m_field->m_monster->m_skillMana;
+	gotoxy(33, 42);
+	if (damage <= 0) {
+		setcolor(7, 0);
+		cout << "공격을 방어!";
+		EndTurn();
+		return;
+	}
+	m_player->m_hp -= damage;
+	cout << "스킬! " << m_field->m_monster->m_skillName << "! 플레이어에게 " << damage << "데미지!";
+	gotoxy(33, 43);
+	switch (m_field->m_monster->m_monsterType)
+	{
+	case MT_SLIME:
+		m_player->m_hp -= m_player->m_hp / 10;
+		cout << "산성으로 인해 플레이어에게 " << m_player->m_hp / 10 << "데미지!";
+		break;
+	case MT_WOLF:
+		m_field->m_monster->isBleeding = true;
+		skillTurn = turn;
+		break;
+	case MT_GOBLIN:
+		m_field->m_monster->m_hp += damage / 10;
+		if (m_field->m_monster->m_hp >= m_field->m_monster->m_maxHp)
+			m_field->m_monster->m_hp = m_field->m_monster->m_maxHp;
+		cout << "고블린이 플레이어의 체력을 " << m_player->m_hp / 10 << "만큼 빼앗았습니다!";
+		break;
+	case MT_ORC:
+		int random = rand() % 2;
+		if (random == 0) {
+			m_player->m_hp -= damage / 2;
+			cout << "추가적인 타격이 들어옵니다! " << damage / 2 << "데미지!";
+		}
+		break;
+	case MT_DRAGON:
+		gotoxy(33, 42);
+		m_player->m_hp -= damage;
+		cout << "스킬! " << m_field->m_monster->m_skillName << "! 플레이어에게 " << damage * 2 << "데미지!";
+		break;
+	default:
+		break;
+	}
+	EndTurn();
+}
 
+void Game::EndTurn()
+{
+	turn++;
+	if (m_field->m_monster->isBleeding == true) {
+		cout << "출혈로 인해 플레이어에게 " << m_player->m_hp / 10 << "데미지!";
+		if ((turn - skillTurn) == 3) {
+			m_field->m_monster->isBleeding = false;
+		}
+	}
+	m_field->m_monster->m_mana++;
+	m_player->m_mana++;
+	if (m_field->m_monster->m_mana >= m_field->m_monster->m_maxMana)
+		m_field->m_monster->m_mana = m_field->m_monster->m_maxMana;
+	if (m_player->m_mana >= m_player->m_maxMana)
+		m_player->m_mana = m_player->m_maxMana;
 }

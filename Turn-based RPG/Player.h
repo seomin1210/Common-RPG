@@ -12,18 +12,17 @@ enum PlayerType
 class Player : public Creature
 {
 public:
-	int m_maxHp;
-	int m_maxMana;
 	int m_exp;
 	int m_maxExp;
 	int m_lv;
 	int tposX;
 	int tposY;
+	int m_playerType;
 	bool isOpenMenu = false;
 	bool isGameStop = false;
 	bool isGameOver = false;
 public:
-	Player(int playerType) : Creature(CT_PLAYER), m_playerType(playerType), m_exp(0), m_lv(1), m_maxExp(10), m_maxHp(0), m_maxMana(0) {
+	Player(int playerType) : Creature(CT_PLAYER), m_playerType(playerType), m_exp(0), m_lv(1), m_maxExp(10) {
 		tposX = 0;
 		tposY = 0;
 	}
@@ -35,8 +34,6 @@ public:
 	virtual void StatUp() {
 
 	}
-protected:
-	int m_playerType;
 };
 
 class Knight : public Player {
@@ -49,6 +46,8 @@ public:
 		m_attack = 10;
 		m_magic = 4;
 		m_defence = 9;
+		m_skillName = "참격";
+		m_skillMana = 4;
 	}
 	void StatUp() override;
 };
@@ -63,6 +62,8 @@ public:
 		m_attack = 15;
 		m_magic = 8;
 		m_defence = 6;
+		m_skillName = "트리플 샷";
+		m_skillMana = 7;
 	}
 	void StatUp() override;
 };
@@ -77,6 +78,8 @@ public:
 		m_attack = 7;
 		m_magic = 11;
 		m_defence = 4;
+		m_skillName = "파이어볼";
+		m_skillMana = 11;
 	}
 	void StatUp() override;
 };

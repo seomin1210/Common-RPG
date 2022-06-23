@@ -24,7 +24,7 @@ void SetMap(char Map[20][HEIGHT][WEIGHT], Player* pPlayer)
 		strcpy_s(Map[i][0], "000000000000000000000000000000");
 	}
 	for (int i = 16; i < 20; i++) {
-		strcpy_s(Map[i][19], "000000000000000000000000000000");
+		strcpy_s(Map[i][29], "000000000000000000000000000000");
 	}
 }
 
@@ -32,10 +32,16 @@ void OutputMap(char Map[20][HEIGHT][WEIGHT], Player* pPlayer, int mapCount)
 {
 	for (int i = 0; i < HEIGHT; i++) {
 		for (int j = 0; j < WEIGHT; j++) {
-			if (pPlayer->tposX == j && pPlayer->tposY == i)
-				cout << "☆";
-			else if (Map[mapCount][i][j] == '0')
+			if (pPlayer->tposX == j && pPlayer->tposY == i) {
+				setcolor(3, 0);
+				cout << "★";
+				setcolor(15, 0);
+			}
+			else if (Map[mapCount][i][j] == '0') {
+				setcolor(4, 0);
 				cout << "■";
+				setcolor(15, 0);
+			}
 			else if (Map[mapCount][i][j] == '1')
 				cout << "  ";
 		}
@@ -46,10 +52,15 @@ void OutputMap(char Map[20][HEIGHT][WEIGHT], Player* pPlayer, int mapCount)
 void OutputMenu(Player* pPlayer, int uiCnt)
 {
 	pPlayer->isOpenMenu = true;
+	setcolor(3, 0);
 	gotoxy(60, 0);
 	cout << "■■■■■■■■■■■■" << endl;
 	gotoxy(60, 1);
-	cout << "■ Lv: " << pPlayer->m_lv << "   " << pPlayer->m_exp << "/" << pPlayer->m_maxExp;
+	cout << "■";
+	setcolor(14, 0);
+	gotoxy(63, 1);
+	cout << "Lv: " << pPlayer->m_lv << "   " << pPlayer->m_exp << "/" << pPlayer->m_maxExp;
+	setcolor(3, 0);
 	gotoxy(82, 1);
 	cout << "■" << endl;
 	gotoxy(60, 2);
@@ -61,7 +72,11 @@ void OutputMenu(Player* pPlayer, int uiCnt)
 	gotoxy(82, 3);
 	cout << "■" << endl;
 	gotoxy(60, 4);
-	cout << "■     스텟";
+	cout << "■     ";
+	setcolor(13, 0);
+	gotoxy(67, 4);
+	cout << "스텟";
+	setcolor(3, 0);
 	gotoxy(82, 4);
 	cout << "■" << endl;
 	gotoxy(60, 5);
@@ -77,7 +92,11 @@ void OutputMenu(Player* pPlayer, int uiCnt)
 	gotoxy(82, 7);
 	cout << "■" << endl;
 	gotoxy(60, 8);
-	cout << "■     장비";
+	cout << "■     ";
+	setcolor(6, 0);
+	gotoxy(67, 8);
+	cout << "장비";
+	setcolor(3, 0);
 	gotoxy(82, 8);
 	cout << "■" << endl;
 	gotoxy(60, 9);
@@ -93,7 +112,11 @@ void OutputMenu(Player* pPlayer, int uiCnt)
 	gotoxy(82, 11);
 	cout << "■" << endl;
 	gotoxy(60, 12);
-	cout << "■     설정";
+	cout << "■     ";
+	setcolor(3, 0);
+	gotoxy(67, 12);
+	cout << "설정";
+	setcolor(3, 0);
 	gotoxy(82, 12);
 	cout << "■" << endl;
 	gotoxy(60, 13);
@@ -109,7 +132,11 @@ void OutputMenu(Player* pPlayer, int uiCnt)
 	gotoxy(82, 15);
 	cout << "■" << endl;
 	gotoxy(60, 16);
-	cout << "■     종료";
+	cout << "■     ";
+	setcolor(4, 0);
+	gotoxy(67, 16);
+	cout << "종료";
+	setcolor(3, 0);
 	gotoxy(82, 16);
 	cout << "■" << endl;
 	gotoxy(60, 17);
@@ -122,6 +149,7 @@ void OutputMenu(Player* pPlayer, int uiCnt)
 	cout << "■" << endl;
 	gotoxy(60, 19);
 	cout << "■■■■■■■■■■■■" << endl;
+	setcolor(14, 0);
 	gotoxy(64, 4 * (uiCnt + 1));
 	cout << ">";
 }
@@ -346,7 +374,7 @@ void Field::Createmonster(BBATTLE bBattle)
 		m_monster = new Wolf();
 		break;
 	case MT_GOBLIN:
-		m_monster = new Wolf();
+		m_monster = new Goblin();
 		break;
 	case MT_ORC:
 		m_monster = new Orc();
@@ -363,6 +391,7 @@ void Field::Startbattle(Game* gGame, BBATTLE bBattle)
 {
 	system("cls");
 	int uiCnt = BTUI_Attack;
+	gGame->turn = 0;
 	Createmonster(bBattle);
 	while (bBattle->isBattle == true)
 	{
@@ -391,39 +420,56 @@ void Field::Startbattle(Game* gGame, BBATTLE bBattle)
 	}
 	delete gGame->m_field->m_monster;
 	gGame->m_field->m_monster = nullptr;
+	bBattle->monsterType = NULL;
 	system("cls");
 }
 
 void OutputBattle(Game* gGame, int uiCnt)
 {
+	setcolor(15, 0);
 	gotoxy(0, 0);
 	cout << "=================================================================================================================================";
+	setcolor(gGame->m_field->m_monster->m_nameColor, 0);
 	gotoxy(60, 6);
 	cout << gGame->m_field->m_monster->m_name;
+	setcolor(4, 0);
 	gotoxy(60, 7);
 	cout << "HP : " << gGame->m_field->m_monster->m_hp;
+	setcolor(9, 0);
+	gotoxy(60, 8);
+	cout << "MANA : " << gGame->m_field->m_monster->m_mana;
+	setcolor(15, 0);
 	gotoxy(0, 39);
 	cout << "=================================================================================================================================" << endl;
+	setcolor(4, 0);
 	gotoxy(10, 42);
 	cout << "HP : " << gGame->m_player->m_hp;
+	setcolor(9, 0);
 	gotoxy(10, 44);
 	cout << "MANA : " << gGame->m_player->m_mana;
+	setcolor(15, 0);
 	for (int i = 40; i < 54; i++) {
 		gotoxy(30, i);
 		cout << "|";
 		gotoxy(100, i);
 		cout << "|";
 	}
+	setcolor(4, 0);
 	gotoxy(105, 41);
 	cout << "     공격";
+	setcolor(9, 0);
 	gotoxy(105, 44);
 	cout << "     스킬";
+	setcolor(7, 0);
 	gotoxy(105, 47);
 	cout << "     방어";
+	setcolor(6, 0);
 	gotoxy(105, 50);
 	cout << "     아이템";
+	setcolor(11, 0);
 	gotoxy(105, 53);
 	cout << "     도망";
+	setcolor(14, 0);
 	gotoxy(105, 41 + (uiCnt * 3));
 	cout << ">";
 }
