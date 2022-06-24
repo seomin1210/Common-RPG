@@ -26,7 +26,23 @@ void Game::Init()
 void Game::Createplayer()
 {
 	while (m_player == nullptr) {
-		system("cls");
+		system("cls");   
+		cout << "          ````````````                       ```     ``##`                                                                            " << endl;
+		cout << "          ############              ########## `    ` `##`                  ##########````   ```##########` `       ` ` #########` ```" << endl;
+		cout << "                    ` `             `        ``     ` `##`                ``###`````######     `##``````#####       `#####`````#####` " << endl;
+		cout << "    `######################`    ##################  ` `##`                ` ##`      ```###   ``##        `###` `  ####  `    ``  ``` " << endl;
+		cout << "        ```     ` ` ` ```      ```````````````````` ` `##`    `           ` ##`        `### ` ``##        ``##` ` ###`                " << endl;
+		cout << "       ``###############       `     `######`` `` ``` `#######`           ` ##`         ###   ``##         `##`  `##``                " << endl;
+		cout << "       ###``     `  ` ###`       ``####`   `####   `` `##``````           ` ##```  ````###  ` ``##    ``  `###   ### `     `          " << endl;
+		cout << "       `####` ` `  `####`        `###`  ` ````##`   ` `##`                ` ############      ``############`   `### `    ` `#######` " << endl;
+		cout << "         ``##########``` `        ####`  ` ` ###`` `` `##`                ` ##` `  ``###``    ``########`````    ### ``    ```````##` " << endl;
+		cout << " `                           ` `` ` ##########``    ` `##`                ` ##`     ```###  ` ``##               `###             ##` " << endl;
+		cout << " `#############################```         ` ```    ` `##`                ` ##`        `##    ``##                ####`           ##` " << endl;
+		cout << "  ` `  `` ```````````````````        `###            ``##`                ` ##`        `###`` ``##              `  `###```      ` ##` " << endl;
+		cout << "      ##``                            ###`                                  ##``       `###``  `##                   #######```#####``" << endl;
+		cout << "      ##``                            ###`                                 `##`          ###`` ```                  ` ` `########`    " << endl;
+		cout << "      ##````````````````````          ###                  ``                                                                         " << endl;
+		cout << "      ####################``         `####################                                                                            " << endl;
 		cout << "==================================================" << endl;
 		cout << "설명 : x를 누르면 메뉴가 열립니다. c는 선택입니다." << endl;
 		cout << "       방향키로 움직일 수 있습니다." << endl;
@@ -67,8 +83,16 @@ void Game::Attack()
 		damageArr[i] = m_player->m_attack - 5 + i;
 	}
 	int idx = rand() % 11;
-	int damage = damageArr[idx] - m_field->m_monster->m_defence;
+	int damage = damageArr[idx];
 	gotoxy(33, 41);
+	int critical = rand() % 10;
+	if (critical < 1) {
+		setcolor(4, 0);
+		cout << "크리티컬!!  ";
+		damage *= 2;
+		setcolor(14, 0);
+	}
+	damage -= m_field->m_monster->m_defence;
 	if (damage <= 0) {
 		setcolor(7, 0);
 		cout << "공격을 방어!";
@@ -76,13 +100,6 @@ void Game::Attack()
 		setcolor(14, 0);
 		MonsterAction();
 		return;
-	}
-	int critical = rand() % 10;
-	if (critical < 1) {
-		setcolor(4, 0);
-		cout << "크리티컬!!  ";
-		damage *= 2;
-		setcolor(14, 0);
 	}
 	m_field->m_monster->m_hp -= damage;
 	cout << m_field->m_monster->m_name << "에게 " << damage << "데미지!";
@@ -111,16 +128,31 @@ void Game::Magic()
 		damageArr[i] = m_player->m_attack - 5 + i;
 	}
 	int idx = rand() % 11;
-	int damage = damageArr[idx] - m_field->m_monster->m_defence + m_player->m_magic;
+	int damage = damageArr[idx];
+	//damage - m_field->m_monster->m_defence + m_player->m_magic;
+	int idx1 = rand() % 11;
+	int idx2 = rand() % 11;
+	int skillDamageArr[11];
+	for (int i = 0; i <= 10; i++) {
+		skillDamageArr[i] = m_player->m_magic - 5 + i;
+	}
+	int skillIdx = rand() % 11;
 	m_player->m_mana -= m_player->m_skillMana;
-	gotoxy(33, 42);
-	if (damage <= 0) {
-		setcolor(7, 0);
-		cout << "공격을 방어!";
-		Sleep(500);
-		setcolor(14, 0);
-		MonsterAction();
-		return;
+	gotoxy(33, 41);
+	switch (m_player->m_playerType)
+	{
+	case PT_KNIGHT:
+		damage = damage + m_player->m_attack / 2 + m_player->m_magic - m_field->m_monster->m_defence;
+		break;
+	case PT_ARCHER:
+		
+		damage = damage + damageArr[idx1] / 2 + damageArr[idx2] / 3 + m_player->m_magic - m_field->m_monster->m_defence;
+		break;
+	case PT_MAGE:
+		damage += skillDamageArr[skillIdx] * 2 - m_field->m_monster->m_defence;
+		break;
+	default:
+		break;
 	}
 	int critical = rand() % 10;
 	if (critical < 1) {
@@ -129,13 +161,17 @@ void Game::Magic()
 		damage *= 2;
 		setcolor(14, 0);
 	}
-	switch (m_player->m_creaturetype)
-	{
-	default:
-		break;
+	if (damage <= 0) {
+		setcolor(7, 0);
+		cout << "공격을 방어!";
+		Sleep(500);
+		setcolor(14, 0);
+		MonsterAction();
+		return;
 	}
 	m_field->m_monster->m_hp -= damage;
-	cout << "스킬! " << m_field->m_monster->m_skillName << "! " << m_field->m_monster->m_name << "에게 " << damage << "데미지!";
+	cout << "스킬! " << m_player->m_skillName << "! " << m_field->m_monster->m_name << "에게 " << damage << "데미지!";
+	MonsterAction();
 }
 
 void Game::Shield()
@@ -230,6 +266,7 @@ void Game::MonsterMagic()
 	}
 	m_player->m_hp -= damage;
 	cout << "스킬! " << m_field->m_monster->m_skillName << "! 플레이어에게 " << damage << "데미지!";
+	int random = rand() % 2;
 	gotoxy(33, 43);
 	switch (m_field->m_monster->m_monsterType)
 	{
@@ -248,7 +285,6 @@ void Game::MonsterMagic()
 		cout << "고블린이 플레이어의 체력을 " << m_player->m_hp / 10 << "만큼 빼앗았습니다!";
 		break;
 	case MT_ORC:
-		int random = rand() % 2;
 		if (random == 0) {
 			m_player->m_hp -= damage / 2;
 			cout << "추가적인 타격이 들어옵니다! " << damage / 2 << "데미지!";
@@ -274,10 +310,8 @@ void Game::EndTurn()
 			m_field->m_monster->isBleeding = false;
 		}
 	}
-	m_field->m_monster->m_mana++;
-	m_player->m_mana++;
-	if (m_field->m_monster->m_mana >= m_field->m_monster->m_maxMana)
-		m_field->m_monster->m_mana = m_field->m_monster->m_maxMana;
-	if (m_player->m_mana >= m_player->m_maxMana)
-		m_player->m_mana = m_player->m_maxMana;
+	if (m_field->m_monster->m_mana < m_field->m_monster->m_maxMana)
+		m_field->m_monster->m_mana += 2;
+	if (m_player->m_mana < m_player->m_maxMana)
+		m_player->m_mana += 2;
 }

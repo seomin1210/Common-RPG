@@ -47,7 +47,7 @@ public:
 		m_magic = 4;
 		m_defence = 9;
 		m_skillName = "참격";
-		m_skillMana = 4;
+		m_skillMana = 7;
 	}
 	void StatUp() override;
 };
@@ -63,7 +63,7 @@ public:
 		m_magic = 8;
 		m_defence = 6;
 		m_skillName = "트리플 샷";
-		m_skillMana = 7;
+		m_skillMana = 11;
 	}
 	void StatUp() override;
 };
@@ -79,7 +79,7 @@ public:
 		m_magic = 11;
 		m_defence = 4;
 		m_skillName = "파이어볼";
-		m_skillMana = 11;
+		m_skillMana = 15;
 	}
 	void StatUp() override;
 };
