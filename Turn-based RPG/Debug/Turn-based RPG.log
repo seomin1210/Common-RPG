@@ -1,6 +1,6 @@
 ﻿  Game.cpp
-C:\Users\USER\Documents\Common-RPG\Turn-based RPG\Game.cpp(72,13): warning C4244: '초기화 중': 'int'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-C:\Users\USER\Documents\Common-RPG\Turn-based RPG\Game.cpp(117,13): warning C4244: '초기화 중': 'int'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-C:\Users\USER\Documents\Common-RPG\Turn-based RPG\Game.cpp(209,13): warning C4244: '초기화 중': 'int'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-C:\Users\USER\Documents\Common-RPG\Turn-based RPG\Game.cpp(245,13): warning C4244: '초기화 중': 'int'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+C:\Users\USER\Documents\Common-RPG\Turn-based RPG\Game.cpp(73,13): warning C4244: '초기화 중': 'int'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+C:\Users\USER\Documents\Common-RPG\Turn-based RPG\Game.cpp(118,13): warning C4244: '초기화 중': 'int'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+C:\Users\USER\Documents\Common-RPG\Turn-based RPG\Game.cpp(210,13): warning C4244: '초기화 중': 'int'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+C:\Users\USER\Documents\Common-RPG\Turn-based RPG\Game.cpp(246,13): warning C4244: '초기화 중': 'int'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
   Turn-based RPG.vcxproj -> C:\Users\USER\Documents\Common-RPG\Turn-based RPG\Debug\Turn-based RPG.exe

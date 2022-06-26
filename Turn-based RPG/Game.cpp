@@ -65,6 +65,7 @@ void Game::Createplayer()
 		else if (iInput == PT_MAGE)
 			m_player = new Mage();
 	}
+	system("cls");
 }
 
 void Game::Attack()
